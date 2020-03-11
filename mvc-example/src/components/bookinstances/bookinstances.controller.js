@@ -1,5 +1,5 @@
-var BookInstance = require('../models/bookinstance');
-var views = require('../constants/views')
+var BookInstance = require('./bookinstance.entity');
+var views = require('../../constants/views')
 
 exports.bookinstance_list = function(req, res, next) {
 

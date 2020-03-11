@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var authorController = require('../controllers/authorController');
+var authorController = require('./authors.controller');
 
 router.get('/create', authorController.author_create_get);
 

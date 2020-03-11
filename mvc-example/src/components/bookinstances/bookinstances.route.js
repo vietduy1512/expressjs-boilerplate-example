@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var bookinstanceController = require('../controllers/bookinstanceController');
+var bookinstanceController = require('./bookinstances.controller');
 
 router.get('/create', bookinstanceController.bookinstance_create_get);
 

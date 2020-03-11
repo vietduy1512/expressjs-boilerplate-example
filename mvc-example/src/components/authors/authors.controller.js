@@ -1,8 +1,8 @@
 
-var Author = require('../models/author');
-var Book = require('../models/book');
+var Author = require('./author.entity');
+var Book = require('../books/book.entity');
 var async = require('async');
-var views = require('../constants/views')
+var views = require('../../constants/views')
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 

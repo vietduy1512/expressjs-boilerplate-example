@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var genreController = require('../controllers/genreController');
+var genreController = require('./genres.controller');
 
 router.get('/create', genreController.genre_create_get);
 

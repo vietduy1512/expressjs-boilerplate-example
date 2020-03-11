@@ -12,10 +12,10 @@ if (!userArgs[0].startsWith('mongodb')) {
 }
 */
 var async = require('async')
-var Book = require('../../models/book')
-var Author = require('../../models/author')
-var Genre = require('../../models/genre')
-var BookInstance = require('../../models/bookinstance')
+var Book = require('../components/books/book.entity')
+var Author = require('../components/authors/author.entity')
+var Genre = require('../components/genres/genre.entity')
+var BookInstance = require('../components/bookinstances/bookinstance.entity')
 
 
 var mongoose = require('mongoose');

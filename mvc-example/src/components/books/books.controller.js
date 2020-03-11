@@ -1,7 +1,7 @@
-var Book = require('../models/book');
-var BookInstance = require('../models/bookinstance');
+var Book = require('./book.entity');
+var BookInstance = require('../bookinstances/bookinstance.entity');
 var async = require('async');
-var views = require('../constants/views')
+var views = require('../../constants/views')
 
 exports.book_list = function(req, res, next) {
 

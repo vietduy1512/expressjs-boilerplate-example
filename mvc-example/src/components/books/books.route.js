@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var bookController = require('../controllers/bookController');
+var bookController = require('./books.controller');
 
 router.get('/create', bookController.book_create_get);
 

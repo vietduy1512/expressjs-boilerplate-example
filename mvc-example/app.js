@@ -6,12 +6,11 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var constants = require('./app-constants');
 
-var homeRouter = require('./routes/home');
-var usersRouter = require('./routes/users');
-var authorsRouter = require('./routes/authors');
-var booksRouter = require('./routes/books');
-var bookinstancesRouter = require('./routes/bookinstances');
-var genresRouter = require('./routes/genres');
+var homeRouter = require('./src/components/home/home.route');
+var authorsRouter = require('./src/components/authors/authors.route');
+var booksRouter = require('./src/components/books/books.route');
+var bookinstancesRouter = require('./src/components/bookinstances/bookinstances.route');
+var genresRouter = require('./src/components/genres/genres.route');
 
 var app = express();
 
@@ -20,11 +19,11 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var exphbs = require('express-handlebars');
-var handlebars  = require('./helpers/handlebars.js')(exphbs);
+var handlebars  = require('./src/helpers/handlebars')(exphbs);
 app.engine('handlebars', handlebars.engine);
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'handlebars');
 
 app.use(logger('dev'));
@@ -34,7 +33,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', homeRouter);
-app.use('/users', usersRouter);
 app.use('/authors', authorsRouter);
 app.use('/books', booksRouter);
 app.use('/bookinstances', bookinstancesRouter);

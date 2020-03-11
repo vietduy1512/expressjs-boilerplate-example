@@ -1,7 +1,7 @@
-var Genre = require('../models/genre');
-var Book = require('../models/book');
+var Genre = require('./genre.entity');
+var Book = require('../books/book.entity');
 var async = require('async');
-var views = require('../constants/views')
+var views = require('../../constants/views')
 const validator = require('express-validator');
 
 exports.genre_list = function(req, res, next) {
