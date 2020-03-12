@@ -27,3 +27,13 @@ exports.index = function(req, res) {
         res.json({ title: 'Local Library Home', error: err, data: results });
     });
 };
+
+exports.badRequest = function(req, res) {
+    res.status(400);
+    res.json('Bad');
+}
+
+exports.internalServerError = function(req, res) {
+    res.status(500);
+    res.json('Error');
+}
