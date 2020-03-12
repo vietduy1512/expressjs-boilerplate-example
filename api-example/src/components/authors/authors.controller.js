@@ -2,7 +2,6 @@
 var Author = require('./author.entity');
 var Book = require('../books/book.entity');
 var async = require('async');
-var views = require('../../constants/views')
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
@@ -14,7 +13,10 @@ exports.author_list = function(req, res, next) {
         if (err) {
             return next(err);
         }
-        res.render(views.author_list, { title: 'Author List', author_list: list_authors });
+        res.json({
+            title: 'Author List',
+            author_list: list_authors
+        });
       });
 };
 
@@ -36,13 +38,17 @@ exports.author_detail = function(req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render(views.author_detail, { title: 'Author Detail', author: results.author, author_books: results.authors_books } );
+        res.json({
+            title: 'Author Detail',
+            author: results.author,
+            author_books: results.authors_books
+        });
     });
 
 };
 
-exports.author_create_get = function(req, res, next) {       
-    res.render(views.author_form, { title: 'Create Author'});
+exports.author_create_get = function(req, res, next) {
+    res.json({ title: 'Create Author'});
 };
 
 exports.author_create_post = [
@@ -61,7 +67,12 @@ exports.author_create_post = [
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.render('author_form', { title: 'Create Author', author: req.body, errors: errors.array() });
+            res.status(400);
+            res.json({
+                title: 'Create Author',
+                author: req.body,
+                errors: errors.array()
+            });
             return;
         }
         else {
@@ -94,7 +105,11 @@ exports.author_delete_get = function(req, res, next) {
         if (results.author == null) {
             res.redirect('/catalog/authors');
         }
-        res.render(views.author_delete, { title: 'Delete Author', author: results.author, author_books: results.authors_books } );
+        res.json({
+            title: 'Delete Author',
+            author: results.author,
+            author_books: results.authors_books
+        });
     });
 };
 
@@ -110,7 +125,11 @@ exports.author_delete_post = function(req, res, next) {
     }, function(err, results) {
         if (err) { return next(err); }
         if (results.authors_books.length > 0) {
-            res.render(views.author_delete, { title: 'Delete Author', author: results.author, author_books: results.authors_books } );
+            res.json({
+                title: 'Delete Author',
+                author: results.author,
+                author_books: results.authors_books
+            });
             return;
         }
         else {
@@ -126,7 +145,7 @@ exports.author_update_get = function(req, res, next) {
     Author.findById(req.params.id)
         .exec(function (err, author) {
             if (err) { return next(err); }
-            res.render(views.author_form, { title: 'Update Author', author: author});
+            res.json({ title: 'Update Author', author: author});
         })
 };
 
@@ -146,7 +165,8 @@ exports.author_update_post = [
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.render('author_form', { title: 'Create Author', author: req.body, errors: errors.array() });
+            res.status(400);
+            res.json({ title: 'Create Author', author: req.body, errors: errors.array() });
             return;
         }
         else {
