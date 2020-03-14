@@ -4,52 +4,52 @@ var bcrypt = require('bcryptjs');
 var Schema = mongoose.Schema;
 
 const RoleTypes = Object.freeze({
-  User: 'User',
-  Admin: 'Admin'
+  USER: 'User',
+  ADMIN: 'Admin'
 });
 
 const UserProperties = Object.freeze({
-  Password: 'Password'
+  PASSWORD: 'Password'
 });
 
-var UserSchema = new Schema(
+var userSchema = new Schema(
   {
-    Email: { type: String, unique: true, trim: true, required: true, max: 60 },
-    Password: { type: String, required: true, max: 32, min: 6 },
-    Fullname: { type: String, required: true, max: 80 },
-    IsActive: { type: Boolean, default: true },
-    Role: {
+    email: { type: String, unique: true, trim: true, required: true, max: 60 },
+    password: { type: String, required: true, max: 32, min: 6 },
+    fullname: { type: String, required: true, max: 80 },
+    isActive: { type: Boolean, default: true },
+    role: {
       type: String,
-      enum: [RoleTypes.User, RoleTypes.Admin],
-      default: RoleTypes.User
+      enum: [RoleTypes.USER, RoleTypes.ADMIN],
+      default: RoleTypes.USER
     }
   }
 );
 
-UserSchema
+userSchema
     .virtual('url')
     .get(() => {
         return '/users/' + this._id;
     });
 
-UserSchema
-    .virtual('IsAdmin')
+userSchema
+    .virtual('isAdmin')
     .get(() => {
-        return this.Role === RoleTypes.Admin;
+        return this.role === RoleTypes.ADMIN;
     });
 
-UserSchema
-    .virtual('IsUser')
+userSchema
+    .virtual('isUser')
     .get(() => {
-        return this.Role === RoleTypes.User;
+        return this.role === RoleTypes.USER;
     });
 
-UserSchema.pre('save', (next) => {
+userSchema.pre('save', (next) => {
     var user = this;
-    if (user.isModified(UserProperties.Password)) {
+    if (user.isModified(UserProperties.PASSWORD)) {
       bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(user.Password, salt, (err, hash) => {
-          user.Password = hash;
+        bcrypt.hash(user.password, salt, (err, hash) => {
+          user.password = hash;
           next();
         })
       })
@@ -58,14 +58,14 @@ UserSchema.pre('save', (next) => {
     }
 })
 
-UserSchema.statics.findByCredentials = async (Email, password) => {
-    let user = await this.findOne({ Email });
+userSchema.statics.findByCredentials = async (email, password) => {
+    let user = await this.findOne({ email });
     if (!user) {
       return null;
     }
 
     return await new Promise((resolve, reject) => {
-      bcrypt.compare(password, user.Password, (err, res) => {
+      bcrypt.compare(password, user.password, (err, res) => {
         if (res) {
           resolve(user);
         } else {
@@ -75,9 +75,9 @@ UserSchema.statics.findByCredentials = async (Email, password) => {
     })
 }
 
-UserSchema.statics.register = (user) => {
+userSchema.statics.register = (user) => {
     var User = this;
-    return User.findOne({ Email: user.Email }).then(data => {
+    return User.findOne({ email: user.email }).then(data => {
         if (data === null) {
             return user.save();
         }
@@ -85,4 +85,4 @@ UserSchema.statics.register = (user) => {
     })
 }
 
-module.exports = mongoose.model(RoleTypes.User, UserSchema);
+module.exports = mongoose.model(RoleTypes.USER, userSchema);
