@@ -42,7 +42,6 @@ class LoginForm extends Component {
         }
       }).catch(error => {
         console.log(error)
-        debugger
         this.setState({
           errorMessage: error.response.data.message
         })
