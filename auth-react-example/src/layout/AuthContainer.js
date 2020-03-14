@@ -30,17 +30,14 @@ class Auth extends Component {
 
   getUser() {
     axios.get('/auth/currentUser').then(response => {
-      console.log('Get user response: ')
-      console.log(response.data)
       if (response.data.user) {
         console.log('Get User: There is a user saved in the server session: ')
-
         this.setState({
           loggedIn: true,
           email: response.data.user.email
         })
       } else {
-        console.log('Get user: no user');
+        console.log('Get user: No user');
         this.setState({
           loggedIn: false,
           email: null

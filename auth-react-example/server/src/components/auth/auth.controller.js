@@ -1,4 +1,4 @@
-var User = require('../users/user.schema');
+const User = require('../users/user.schema');
 
 exports.currentUser = async (req, res) => {
     if (req.user) {

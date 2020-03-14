@@ -8,7 +8,8 @@ class LoginForm extends Component {
     this.state = {
       email: '',
       password: '',
-      redirectTo: null
+      redirectTo: null,
+      errorMessage: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -23,15 +24,11 @@ class LoginForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    console.log('handleSubmit')
 
     axios.post('/auth/login', {
         email: this.state.email,
         password: this.state.password
-      })
-      .then(response => {
-        console.log('login response: ')
-        console.log(response)
+      }).then(response => {
         if (response.status === 200) {
           // update App.js state
           this.props.updateUser({
@@ -44,9 +41,11 @@ class LoginForm extends Component {
           })
         }
       }).catch(error => {
-        console.log('login error: ')
-        console.log(error);
-
+        console.log(error)
+        debugger
+        this.setState({
+          errorMessage: error.response.data.message
+        })
       })
   }
 
@@ -87,6 +86,7 @@ class LoginForm extends Component {
                     onClick={this.handleSubmit}
                     type="submit">Login</button>
                 </div>
+                <p className="text-danger">{this.state.errorMessage}</p>
               </form>
             </div>
           </div>

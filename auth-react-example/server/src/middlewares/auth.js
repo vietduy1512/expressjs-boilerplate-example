@@ -19,7 +19,7 @@ module.exports.isNotAuthenMiddleware = (req, res, next) => {
 
 exports.isAdminMiddleware = (req, res, next) => {
   if (req.isAuthenticated()) {
-      var user = req.user;
+      let user = req.user;
       if (user.isAdmin)
           return next();
   }
@@ -28,8 +28,8 @@ exports.isAdminMiddleware = (req, res, next) => {
 
 exports.isAuthorized = (req, res, next) => {
   if (req.isAuthenticated()) {
-      var user = req.user;
-      var id = req.params.id;
+      let user = req.user;
+      let id = req.params.id;
       if (user._id.toHexString() === id)
           return next();
   }

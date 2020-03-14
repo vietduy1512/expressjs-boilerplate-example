@@ -1,22 +1,23 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
-var mongoose = require('mongoose');
-var constants = require('./app.constants');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const constants = require('./app.constants');
 const session = require('express-session');
 const passport = require('./src/passport');
 
 const PORT = 8080;
 
-var indexRouter = require('./src/components/home/index.route');
-var authRouter = require('./src/components/auth/auth.route');
+const indexRouter = require('./src/components/home/index.route');
+const authRouter = require('./src/components/auth/auth.route');
 
-var app = express();
+const app = express();
 
-mongoose.connect(constants.mongoUrl, { useNewUrlParser: true });
-var db = mongoose.connection;
+mongoose.set('useCreateIndex', true);
+mongoose.connect(constants.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(cors())
