@@ -2,7 +2,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var cors = require('cors')
+var cors = require('cors');
+var mongoose = require('mongoose');
+var constants = require('./app-constants');
 
 const PORT = 8080;
 
@@ -10,6 +12,10 @@ var indexRouter = require('./src/components/home/index.route');
 var usersRouter = require('./src/components/users/users.route');
 
 var app = express();
+
+mongoose.connect(constants.mongoUrl, { useNewUrlParser: true });
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(cors())
 app.use(logger('dev'));
