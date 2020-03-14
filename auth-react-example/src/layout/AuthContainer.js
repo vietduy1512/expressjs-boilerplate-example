@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import { Route } from 'react-router-dom'
-// components
-import Signup from './sign-up'
-import LoginForm from './login-form'
-import Navbar from './navbar'
-import Home from './home'
+
+import RegisterForm from '../components/Auth/RegisterForm'
+import LoginForm from '../components/Auth/LoginForm'
+import Navbar from '../components/Common/Navbar'
+import HomePage from '../components/Auth/HomePage'
 
 class Auth extends Component {
   constructor() {
@@ -51,17 +51,14 @@ class Auth extends Component {
 
   render() {
     return (
-      <div className="App">
-   
+      <div>
         <Navbar updateUser={this.updateUser} loggedIn={this.state.loggedIn} />
-        {/* greet user if logged in: */}
         {this.state.loggedIn &&
-          <p>Join the party, {this.state.email}!</p>
+          <p>Welcome, {this.state.email}!</p>
         }
-        {/* Routes to different components */}
         <Route
           exact path="/"
-          component={Home} />
+          component={HomePage} />
         <Route
           path="/login"
           render={() =>
@@ -70,9 +67,9 @@ class Auth extends Component {
             />}
         />
         <Route
-          path="/signup"
+          path="/register"
           render={() =>
-            <Signup/>}
+            <RegisterForm/>}
         />
 
       </div>

@@ -1,11 +1,12 @@
 import React from 'react';
-import './App.css';
-import Auth from './components/auth';
+import AuthContainer from './layout/AuthContainer';
 
 
 function App() {
   return (
-    <Auth />
+    <div class="container-fluid">
+      <AuthContainer />
+    </div>
   );
 }
 
