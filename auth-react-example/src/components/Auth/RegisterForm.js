@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 class RegisterForm extends Component {
@@ -14,11 +15,13 @@ class RegisterForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
+
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
     })
   }
+
   handleSubmit(event) {
     event.preventDefault();
     axios.post('/auth/register', {
@@ -29,6 +32,7 @@ class RegisterForm extends Component {
           this.setState({
             redirectTo: '/login'
           })
+          toast.success("Register successfully!");
         } else {
           this.setState({
             errorMessage: 'Email is already taken'
@@ -41,6 +45,7 @@ class RegisterForm extends Component {
         })
       })
   }
+
   render() {
     if (this.state.redirectTo) {
       return <Redirect to={{ pathname: this.state.redirectTo }} />

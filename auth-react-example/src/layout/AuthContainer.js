@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import { Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
 
 import RegisterForm from '../components/Auth/RegisterForm'
 import LoginForm from '../components/Auth/LoginForm'
@@ -69,6 +70,7 @@ class Auth extends Component {
             <RegisterForm/>}
         />
 
+        <ToastContainer />
       </div>
     );
   }

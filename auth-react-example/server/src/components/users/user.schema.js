@@ -1,14 +1,14 @@
-var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 const RoleTypes = Object.freeze({
   USER: 'User',
   ADMIN: 'Admin'
 });
 
-var userSchema = new Schema(
+let userSchema = new Schema(
   {
     email: { type: String, unique: true, trim: true, required: true, max: 60 },
     password: { type: String, required: true, max: 32, min: 6 },
@@ -41,7 +41,7 @@ userSchema
     });
 
 userSchema.pre('save', function(next) {
-    var user = this;
+    let user = this;
     if (user.password) {
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(user.password, salt, (err, hash) => {

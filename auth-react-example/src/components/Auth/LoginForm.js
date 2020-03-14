@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
+import { toast } from 'react-toastify';
 import axios from 'axios'
 
 class LoginForm extends Component {
@@ -13,7 +14,6 @@ class LoginForm extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
-
   }
 
   handleChange(event) {
@@ -39,9 +39,9 @@ class LoginForm extends Component {
           this.setState({
             redirectTo: '/'
           })
+          toast.success("Login successfully!");
         }
       }).catch(error => {
-        console.log(error)
         this.setState({
           errorMessage: error.response.data.message
         })
