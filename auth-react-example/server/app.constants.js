@@ -1,1 +1,1 @@
-exports.mongoUrl = 'mongodb://localhost:27017/my_database';
+exports.mongoUrl = 'mongodb://localhost:27017/auth_test';

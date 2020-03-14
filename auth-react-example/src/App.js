@@ -1,13 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Signup from './components/sign-up'
+import Auth from './components/auth';
+
 
 function App() {
   return (
-    <div className="App">
-      <Signup />
-    </div>
+    <Auth />
   );
 }
 

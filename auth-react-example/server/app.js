@@ -4,12 +4,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 var mongoose = require('mongoose');
-var constants = require('./app-constants');
+var constants = require('./app.constants');
+const session = require('express-session');
+const passport = require('./src/passport');
 
 const PORT = 8080;
 
 var indexRouter = require('./src/components/home/index.route');
-var usersRouter = require('./src/components/users/users.route');
+var authRouter = require('./src/components/auth/auth.route');
 
 var app = express();
 
@@ -24,24 +26,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+  secret: "SeRectKeY@123",
+  saveUninitialized: true,
+  resave: true
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use('/', indexRouter);
-app.use('/', usersRouter);
-
-// 404 Handler
-app.use(function(req, res, next) {
-  res.status(404);
-  res.json({
-    error: 'Request not found: ' + req.url
-  });
-});
-
-// Error Handler
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.json({
-    error: err.message
-  });
-});
+app.use('/', authRouter);
 
 app.listen(PORT, () => {
 	console.log(`App listening on PORT: ${PORT}`)
