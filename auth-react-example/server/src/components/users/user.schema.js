@@ -64,13 +64,6 @@ userSchema.methods = {
 }
 
 userSchema.statics = {
-  findByCredentials: async function(email, password) {
-    let user = await this.findOne({ email });
-    if (!user) {
-      return null;
-    }
-    return await bcrypt.compare(password, user.password);
-  },
   register: function(user) {
     return this.findOne({ email: user.email }).then(data => {
         if (data === null) {

@@ -1,37 +1,39 @@
 
 
-module.exports.isAuthenMiddleware = (req, res, next) => {
+module.exports.isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
-      next();
+    next();
   } else {
-      res.redirect('/');
+    res.status(401).end();
   }
 }
 
 
-module.exports.isNotAuthenMiddleware = (req, res, next) => {
+module.exports.isNotAuthenticated = (req, res, next) => {
   if (!req.isAuthenticated()) {
-      next();
+    next();
   } else {
-      res.redirect('/');
+    res.status(401).end();
   }
 }
 
-exports.isAdminMiddleware = (req, res, next) => {
+exports.isAdmin = (req, res, next) => {
   if (req.isAuthenticated()) {
-      let user = req.user;
-      if (user.isAdmin)
-          return next();
+    let user = req.user;
+    if (user.isAdmin) {
+      return next();
+    }
   }
-  res.redirect('/admins/login');
+  res.status(401).end();
 }
 
 exports.isAuthorized = (req, res, next) => {
   if (req.isAuthenticated()) {
-      let user = req.user;
-      let id = req.params.id;
-      if (user._id.toHexString() === id)
-          return next();
+    let user = req.user;
+    let id = req.params.id;
+    if (user._id.toHexString() === id) {
+      return next();
+    }
   }
-  res.redirect('/');
+  res.status(401).end();
 }

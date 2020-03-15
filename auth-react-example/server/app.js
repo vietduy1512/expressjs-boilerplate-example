@@ -13,7 +13,7 @@ const app = express();
 
 const PORT = 8080;
 
-var corsOptions = {
+const corsOptions = {
   origin: true,
   credentials: true
 };

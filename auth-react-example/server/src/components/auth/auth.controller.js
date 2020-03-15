@@ -8,25 +8,9 @@ exports.currentUser = async (req, res) => {
     }
 }
 
-exports.login = async (req, res) => {
-    const { email, password } = req.body
-
-    let user = await User.findByCredentials(email, password);
-    if (!user) {
-        res.status(400);
-        return res.json({ message: "Email or Password is incorrect" });
-    }
-
-    // TODO: Implement user.IsActive
-    req.login(user, (err) => {
-        if (err) {
-            res.status(400);
-            return res.json({ message: "Email or Password is incorrect" });
-        }
-        res.json({ err: false });
-    });
+exports.login = (req, res) => {
+    res.json({ email: req.user.email });
 }
-
 
 exports.register = async (req, res) => {
     const { email, password } = req.body
