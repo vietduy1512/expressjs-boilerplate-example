@@ -35,7 +35,7 @@ class Navbar extends Component {
           <div className="navbar-nav">
             {loggedIn ? (
               <>
-                <Link className="nav-item nav-link active" onClick={this.logout}>Logout</Link>
+                <Link className="nav-item nav-link active" onClick={this.logout} to="#">Logout</Link>
               </>
             ) : (
               <>

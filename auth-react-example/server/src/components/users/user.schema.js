@@ -55,10 +55,10 @@ userSchema.pre('save', function(next) {
 })
 
 userSchema.methods = {
-  checkPassword: (inputPassword) => {
+  checkPassword: function(inputPassword) {
     return bcrypt.compareSync(inputPassword, this.password)
   },
-  hashPassword: plainTextPassword => {
+  hashPassword: function(plainTextPassword) {
     return bcrypt.hashSync(plainTextPassword, 10)
   }
 }

@@ -6,7 +6,8 @@ const cors = require('cors');
 const session = require('express-session');
 const passport = require('./src/passport');
 const routes = require('./routes');
-require('./src/mongoose')();
+const dbConnection = require('./src/mongoose');
+const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 
@@ -21,8 +22,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
   secret: "SeRectKeY@123",
-  saveUninitialized: true,
-  resave: true
+  store: new MongoStore({ mongooseConnection: dbConnection }),
+  resave: false,
+  saveUninitialized: false
 }))
 
 app.use(passport.initialize())
