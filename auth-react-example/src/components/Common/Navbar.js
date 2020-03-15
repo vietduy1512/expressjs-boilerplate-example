@@ -13,7 +13,7 @@ class Navbar extends Component {
     axios.post('/auth/logout').then(response => {
       if (response.status === 200) {
         this.props.updateUser({
-          loggedIn: false,
+          isAuthenticated: false,
           email: null
         })
       }
@@ -23,7 +23,7 @@ class Navbar extends Component {
   }
 
   render() {
-    const loggedIn = this.props.loggedIn;
+    const isAuthenticated = this.props.isAuthenticated;
 
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -33,7 +33,7 @@ class Navbar extends Component {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            {loggedIn ? (
+            {isAuthenticated ? (
               <>
                 <Link className="nav-item nav-link active" onClick={this.logout} to="#">Logout</Link>
               </>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { Route } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify';
+import { Route, Redirect } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
 
 import RegisterForm from '../components/Auth/RegisterForm'
 import LoginForm from '../components/Auth/LoginForm'
@@ -12,7 +12,7 @@ class Auth extends Component {
   constructor() {
     super()
     this.state = {
-      loggedIn: false,
+      isAuthenticated: false,
       email: null
     }
 
@@ -32,15 +32,13 @@ class Auth extends Component {
   getUser() {
     axios.get('/auth/currentUser').then(response => {
       if (response.data.user) {
-        console.log('Get User: There is a user saved in the server session: ')
         this.setState({
-          loggedIn: true,
+          isAuthenticated: true,
           email: response.data.user.email
         })
       } else {
-        console.log('Get user: No user');
         this.setState({
-          loggedIn: false,
+          isAuthenticated: false,
           email: null
         })
       }
@@ -50,30 +48,51 @@ class Auth extends Component {
   render() {
     return (
       <div>
-        <Navbar updateUser={this.updateUser} loggedIn={this.state.loggedIn} />
-        {this.state.loggedIn &&
+        <Navbar updateUser={this.updateUser} isAuthenticated={this.state.isAuthenticated} />
+        
+        {
+          this.state.isAuthenticated &&
           <p>Welcome, {this.state.email}!</p>
         }
-        <Route
-          exact path="/"
-          component={HomePage} />
-        <Route
-          path="/login"
-          render={() =>
-            <LoginForm
-              updateUser={this.updateUser}
-            />}
-        />
-        <Route
-          path="/register"
-          render={() =>
-            <RegisterForm/>}
-        />
+
+        <PrivateRoute container={this} exact path="/">
+          <HomePage/>
+        </PrivateRoute>
+        <Route path="/login">
+          <LoginForm updateUser={this.updateUser}/>
+        </Route>
+        <Route path="/register">
+          <RegisterForm/>
+        </Route>
 
         <ToastContainer />
       </div>
     );
   }
+}
+
+// TODO: Replace this container param with Redux
+function PrivateRoute({ container, children, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={({ location }) => {
+        if (container.state.isAuthenticated) {
+          return children;
+        } else {
+          toast.error("Unauthorized! You need to login.")
+          return (
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: { from: location }
+              }}
+            />
+          );
+        }
+      }}
+    />
+  );
 }
 
 export default Auth;
