@@ -3,10 +3,10 @@ import axios from 'axios'
 import { Route, Redirect } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 
-import RegisterForm from '../components/Auth/RegisterForm'
-import LoginForm from '../components/Auth/LoginForm'
-import Navbar from '../components/Common/Navbar'
-import HomePage from '../components/Auth/HomePage'
+import RegisterForm from '../components/auth/RegisterForm'
+import LoginForm from '../components/auth/LoginForm'
+import Navbar from '../components/common/Navbar'
+import HomePage from '../components/auth/HomePage'
 
 class Auth extends Component {
   constructor() {
