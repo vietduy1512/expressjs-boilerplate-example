@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import { toast } from 'react-toastify';
+import { AppState } from '../../constants'
 import axios from 'axios'
 
 class LoginForm extends Component {
@@ -31,7 +32,7 @@ class LoginForm extends Component {
       }).then(response => {
         if (response.status === 200) {
           this.props.updateUser({
-            isAuthenticated: true,
+            appState: AppState.AUTHENTICATED,
             email: response.data.email
           })
           this.setState({
@@ -51,7 +52,7 @@ class LoginForm extends Component {
       return <Redirect to={{ pathname: this.state.redirectTo }} />
     } else {
       return (
-        <div className="row"> 
+        <div className="row m-0"> 
           <div className="card offset-4 col-4 p-0 text-center">
             <div className="card-header">Login</div>
             <div className="card-body">

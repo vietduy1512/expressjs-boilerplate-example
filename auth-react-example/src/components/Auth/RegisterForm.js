@@ -51,7 +51,7 @@ class RegisterForm extends Component {
       return <Redirect to={{ pathname: this.state.redirectTo }} />
     } else {
       return (
-        <div className="row"> 
+        <div className="row m-0"> 
           <div className="card offset-4 col-4 p-0 text-center">
             <div className="card-header">Register</div>
             <div className="card-body">
