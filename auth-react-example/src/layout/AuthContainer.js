@@ -13,6 +13,7 @@ class Auth extends Component {
     super()
     this.state = {
       isAuthenticated: false,
+      isLogout: false,
       email: null
     }
 
@@ -80,7 +81,11 @@ function PrivateRoute({ container, children, ...rest }) {
         if (container.state.isAuthenticated) {
           return children;
         } else {
-          toast.error("Unauthorized! You need to login.")
+          if (container.state.isLogout) {
+            container.setState({isLogout: false});
+          } else {
+            toast.error("Unauthorized! You need to login.")
+          }
           return (
             <Redirect
               to={{

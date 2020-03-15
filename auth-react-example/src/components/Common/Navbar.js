@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { withRouter } from "react-router-dom";
 import axios from 'axios'
 
 class Navbar extends Component {
@@ -14,6 +15,7 @@ class Navbar extends Component {
       if (response.status === 200) {
         this.props.updateUser({
           isAuthenticated: false,
+          isLogout: true,
           email: null
         })
       }
@@ -52,4 +54,4 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar
+export default withRouter(Navbar);
