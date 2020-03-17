@@ -5,7 +5,6 @@ import { AppState } from 'constants/app'
 import { connect } from 'react-redux';
 import { postLogout } from 'actions/appAction'
 
-// TODO: Replace this container param with Redux
 function PrivateRoute({ postLogout, appState, children, ...rest }) {
 
   const { addToast } = useToasts();

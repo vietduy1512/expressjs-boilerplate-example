@@ -1,14 +1,9 @@
 import React, { useEffect } from 'react';
-import { Route } from 'react-router-dom'
-
-import RegisterForm from 'components/auth/RegisterForm'
-import LoginForm from 'components/auth/LoginForm'
 import Navbar from 'components/common/Navbar'
-import HomePage from 'components/home/HomePage'
 import { AppState } from 'constants/app'
 import { getUser } from 'actions/appAction'
 import { connect } from 'react-redux';
-import PrivateRoute from './PrivateRoute'
+import RouterView from 'routes/main';
 
 const Auth = (props) => {
   
@@ -24,25 +19,9 @@ const Auth = (props) => {
       {
         isLoading ? 
         (<>
-
         </>) : (<>
           <Navbar/>
-  
-          <PrivateRoute exact path="/">
-            <HomePage/>
-          </PrivateRoute>
-          <PrivateRoute path="/courses">
-            <HomePage/>
-          </PrivateRoute>
-          <PrivateRoute path="/progress">
-            <HomePage/>
-          </PrivateRoute>
-          <Route path="/login">
-            <LoginForm/>
-          </Route>
-          <Route path="/register">
-            <RegisterForm/>
-          </Route>
+          <RouterView/>
         </>)
       }
     </div>
