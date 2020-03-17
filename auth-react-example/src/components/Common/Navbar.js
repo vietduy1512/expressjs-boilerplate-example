@@ -17,7 +17,7 @@ const Navbar = (props) => {
         })
       }
     }).catch(error => {
-      // TODO: 
+      console.log(error);
     })
   }
 

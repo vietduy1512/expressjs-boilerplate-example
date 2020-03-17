@@ -3,17 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter } from 'react-router-dom' 
+import { BrowserRouter } from 'react-router-dom';
+import { ToastProvider } from 'react-toast-notifications';
 import './interceptors';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
-import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
 	<BrowserRouter>
-		<App />
+		<ToastProvider>
+			<App />
+		</ToastProvider>
 	</BrowserRouter>,
 	document.getElementById('root')
 )

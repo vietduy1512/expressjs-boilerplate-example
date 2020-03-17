@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
-import { toast } from 'react-toastify';
+import { useToasts } from 'react-toast-notifications'
 import { AppState } from '../../constants'
 import axios from 'axios'
 
 const LoginForm = (props) => {
+
+  const { addToast } = useToasts();
 
   const [form, setForm] = useState({
     email: '',
@@ -34,10 +36,9 @@ const LoginForm = (props) => {
             ...form,
             redirectTo: '/'
           })
-          toast.success("Login successfully!");
+          addToast('Login successfully!', { appearance: 'success', autoDismiss: true, });
         }
       }).catch(error => {
-        console.log(form);
         setForm({
           ...form,
           errorMessage: error.response.data.message

@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
-import { toast } from 'react-toastify';
+import { useToasts } from 'react-toast-notifications'
 import axios from 'axios';
 
 const RegisterForm = () => {
-  
+
+  const { addToast } = useToasts();
+
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -29,7 +31,7 @@ const RegisterForm = () => {
           setForm({
             redirectTo: '/login'
           })
-          toast.success("Register successfully!");
+          addToast("Register successfully!", { appearance: 'success', autoDismiss: true, });
         } else {
           setForm({
             errorMessage: 'Email is already taken'

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import { Route, Redirect } from 'react-router-dom'
-import { ToastContainer, toast } from 'react-toastify';
+import { useToasts } from 'react-toast-notifications'
 
 import RegisterForm from '../components/auth/RegisterForm'
 import LoginForm from '../components/auth/LoginForm'
@@ -29,7 +29,6 @@ const Auth = () => {
 
   const getUser = async () => {
     let response = await axios.get('/auth/currentUser');
-    console.log(response)
     if (response.data.user) {
       await setAppState(AppState.AUTHENTICATED)
       await setUserData({
@@ -67,8 +66,6 @@ const Auth = () => {
           <Route path="/register">
             <RegisterForm/>
           </Route>
-  
-          <ToastContainer />
         </>)
       }
     </div>
@@ -77,6 +74,9 @@ const Auth = () => {
 
 // TODO: Replace this container param with Redux
 function PrivateRoute({ appState, updateUser, children, ...rest }) {
+
+  const { addToast } = useToasts();
+
   return (
     <Route
       {...rest}
@@ -93,7 +93,7 @@ function PrivateRoute({ appState, updateUser, children, ...rest }) {
             break;
 
           default:
-            toast.error("Unauthorized! You need to login.")
+            addToast("Unauthorized! You need to login.", { appearance: 'error', autoDismiss: true, });
             break;
         }
         return (
