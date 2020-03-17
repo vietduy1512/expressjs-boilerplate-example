@@ -1,5 +1,5 @@
 import { UPDATE_APP_STATE, UPDATE_APP_CURRENT_USER } from "./types";
-import { AppState } from '../constants'
+import { AppState } from 'constants/app'
 import axios from 'axios'
 
 export const getUser = () => async (dispatch) => {

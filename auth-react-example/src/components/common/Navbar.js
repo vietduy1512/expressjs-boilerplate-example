@@ -2,9 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { withRouter } from "react-router-dom";
 import axios from 'axios'
-import { AppState } from '../../constants'
+import { AppState } from 'constants/app'
 import { connect } from 'react-redux';
-import { logout } from '../../actions/appAction'
+import { logout } from 'actions/appAction'
 
 const Navbar = (props) => {
   

@@ -1,5 +1,5 @@
-import { UPDATE_APP_STATE, UPDATE_APP_CURRENT_USER } from "../actions/types";
-import { AppState } from '../constants'
+import { UPDATE_APP_STATE, UPDATE_APP_CURRENT_USER } from "actions/types";
+import { AppState } from 'constants/app'
 
 const initialState = {
   state: AppState.LOADING,

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
-import { AppState } from '../constants'
+import { AppState } from 'constants/app'
 import { connect } from 'react-redux';
-import { postLogout } from '../actions/appAction'
+import { postLogout } from 'actions/appAction'
 
 // TODO: Replace this container param with Redux
 function PrivateRoute({ postLogout, appState, children, ...rest }) {

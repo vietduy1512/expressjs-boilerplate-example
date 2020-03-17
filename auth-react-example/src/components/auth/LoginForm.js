@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { connect } from 'react-redux';
-import { login } from '../../actions/appAction'
+import { login } from 'actions/appAction'
 import axios from 'axios'
 
 const LoginForm = (props) => {

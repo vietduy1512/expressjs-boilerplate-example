@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom'
 
-import RegisterForm from '../components/auth/RegisterForm'
-import LoginForm from '../components/auth/LoginForm'
-import Navbar from '../components/common/Navbar'
-import HomePage from '../components/home/HomePage'
-import { AppState } from '../constants'
-import { getUser } from '../actions/appAction'
+import RegisterForm from 'components/auth/RegisterForm'
+import LoginForm from 'components/auth/LoginForm'
+import Navbar from 'components/common/Navbar'
+import HomePage from 'components/home/HomePage'
+import { AppState } from 'constants/app'
+import { getUser } from 'actions/appAction'
 import { connect } from 'react-redux';
 import PrivateRoute from './PrivateRoute'
 
