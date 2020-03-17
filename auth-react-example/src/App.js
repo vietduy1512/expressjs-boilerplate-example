@@ -1,12 +1,14 @@
 import React from 'react';
 import AuthContainer from './layout/AuthContainer';
+import { Provider } from 'react-redux';
+import store from './store';
 
 
 function App() {
   return (
-    <div className="container-fluid p-0">
+    <Provider store={store} className="container-fluid p-0">
       <AuthContainer />
-    </div>
+    </Provider>
   );
 }
 

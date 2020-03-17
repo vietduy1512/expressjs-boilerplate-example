@@ -1,46 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'
-import { Route, Redirect } from 'react-router-dom'
-import { useToasts } from 'react-toast-notifications'
+import React, { useEffect } from 'react';
+import { Route } from 'react-router-dom'
 
 import RegisterForm from '../components/auth/RegisterForm'
 import LoginForm from '../components/auth/LoginForm'
 import Navbar from '../components/common/Navbar'
 import HomePage from '../components/home/HomePage'
 import { AppState } from '../constants'
+import { getUser } from '../actions/appAction'
+import { connect } from 'react-redux';
+import PrivateRoute from './PrivateRoute'
 
-const Auth = () => {
+const Auth = (props) => {
   
-  const [appState, setAppState] = useState(AppState.LOADING);
-  const [userData, setUserData] = useState({
-    email: null
-  });
-
-  const isLoading = appState === AppState.LOADING;
-
   useEffect(() => {
-    getUser();
+    props.getUser();
+    // eslint-disable-next-line
   }, [])
-
-  const updateUser = (appState, user) => {
-    setAppState(appState);
-    setUserData(user);
-  }
-
-  const getUser = async () => {
-    let response = await axios.get('/auth/currentUser');
-    if (response.data.user) {
-      await setAppState(AppState.AUTHENTICATED)
-      await setUserData({
-        email: response.data.user.email
-      })
-    } else {
-      await setAppState(AppState.GUEST)
-      await setUserData({
-        email: null
-      })
-    }
-  }
+  
+  const isLoading = props.appState === AppState.LOADING;
 
   return (
     <div>
@@ -49,19 +26,19 @@ const Auth = () => {
         (<>
 
         </>) : (<>
-          <Navbar updateUser={updateUser} user={userData} appState={appState} />
+          <Navbar/>
   
-          <PrivateRoute appState={appState} updateUser={updateUser} exact path="/">
+          <PrivateRoute exact path="/">
             <HomePage/>
           </PrivateRoute>
-          <PrivateRoute appState={appState} updateUser={updateUser} path="/courses">
+          <PrivateRoute path="/courses">
             <HomePage/>
           </PrivateRoute>
-          <PrivateRoute appState={appState} updateUser={updateUser} path="/progress">
+          <PrivateRoute path="/progress">
             <HomePage/>
           </PrivateRoute>
           <Route path="/login">
-            <LoginForm updateUser={updateUser}/>
+            <LoginForm/>
           </Route>
           <Route path="/register">
             <RegisterForm/>
@@ -72,41 +49,9 @@ const Auth = () => {
   );
 }
 
-// TODO: Replace this container param with Redux
-function PrivateRoute({ appState, updateUser, children, ...rest }) {
+const mapStateToProps = (state) => ({
+  appState: state.app.state,
+  currentUser: state.app.user
+});
 
-  const { addToast } = useToasts();
-
-  return (
-    <Route
-      {...rest}
-      render={({ location }) => {
-        switch (appState) {
-          case AppState.LOADING:
-            return <></>;
-
-          case AppState.AUTHENTICATED:
-            return children;
-
-          case AppState.LOGOUT:
-            updateUser({appState: AppState.GUEST});
-            break;
-
-          default:
-            addToast("Unauthorized! You need to login.", { appearance: 'error', autoDismiss: true, });
-            break;
-        }
-        return (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: location }
-            }}
-          />
-        );
-      }}
-    />
-  );
-}
-
-export default Auth;
+export default connect(mapStateToProps, { getUser })(Auth);

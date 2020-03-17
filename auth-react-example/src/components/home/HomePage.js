@@ -10,8 +10,8 @@ const Home = () => {
     axios.get('/data').then(res => {
       setTitle(res.data.title);
       setDataList(res.data.data);
-    }, [])
-  })
+    })
+  }, [])
 
   return (
     <div className="text-center">

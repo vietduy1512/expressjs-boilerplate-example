@@ -1,18 +1,16 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
-import { connect } from 'react-redux';
-import { login } from '../../actions/appAction'
-import axios from 'axios'
+import axios from 'axios';
 
-const LoginForm = (props) => {
+const RegisterForm = () => {
 
   const { addToast } = useToasts();
 
   const [form, setForm] = useState({
     email: '',
     password: '',
-    redirectTo: null,
+    confirmPassword: '',
     errorMessage: ''
   });
 
@@ -24,20 +22,24 @@ const LoginForm = (props) => {
   }
 
   const handleSubmit = (event) => {
-    event.preventDefault()
-    axios.post('/auth/login', {
-        email: form.email,
-        password: form.password
-      }).then(response => {
-        if (response.status === 200) {
-          let user = response.data;
-          props.login(user);
-          setForm({ ...form, redirectTo: '/' });
-          addToast('Login successfully!', { appearance: 'success', autoDismiss: true, });
+    event.preventDefault();
+    axios.post('/auth/register', {
+      email: form.email,
+      password: form.password
+    }).then(response => {
+        if (!response.data.errmsg) {
+          setForm({
+            redirectTo: '/login'
+          })
+          addToast("Register successfully!", { appearance: 'success', autoDismiss: true, });
+        } else {
+          setForm({
+            errorMessage: 'Email is already taken'
+          })
         }
-      }).catch(error => {
+      })
+      .catch(error => {
         setForm({
-          ...form,
           errorMessage: error.response.data.message
         })
       })
@@ -49,12 +51,12 @@ const LoginForm = (props) => {
     return (
       <div className="row m-0"> 
         <div className="card offset-4 col-4 p-0 text-center">
-          <div className="card-header">Login</div>
+          <div className="card-header">Register</div>
           <div className="card-body">
             <form>
               <div className="form-group">
                 <input className="form-control"
-                  type="text"
+                  type="email"
                   id="email"
                   name="email"
                   placeholder="Email"
@@ -72,12 +74,11 @@ const LoginForm = (props) => {
                 />
               </div>
               <div className="form-group">
-                <div className="col-7"></div>
                 <button
                   className="btn btn-primary"
-
                   onClick={handleSubmit}
-                  type="submit">Login</button>
+                  type="submit"
+                >Sign up</button>
               </div>
               <p className="text-danger">{form.errorMessage}</p>
             </form>
@@ -88,9 +89,4 @@ const LoginForm = (props) => {
   }
 }
 
-const mapStateToProps = (state) => ({
-  appState: state.app.state,
-  currentUser: state.app.user
-});
-
-export default connect(mapStateToProps, { login })(LoginForm);
+export default RegisterForm;
