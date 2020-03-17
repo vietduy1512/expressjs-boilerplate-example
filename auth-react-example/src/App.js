@@ -4,7 +4,7 @@ import AuthContainer from './layout/AuthContainer';
 
 function App() {
   return (
-    <div className="container-fluid">
+    <div className="container-fluid p-0">
       <AuthContainer />
     </div>
   );

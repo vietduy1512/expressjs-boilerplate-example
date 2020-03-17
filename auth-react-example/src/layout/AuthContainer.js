@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import { Route, Redirect } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
@@ -9,84 +9,79 @@ import Navbar from '../components/common/Navbar'
 import HomePage from '../components/home/HomePage'
 import { AppState } from '../constants'
 
-class Auth extends Component {
-  constructor() {
-    super()
-    this.state = {
-      appState: AppState.LOADING,
-      email: null
-    }
+const Auth = () => {
+  
+  const [appState, setAppState] = useState(AppState.LOADING);
+  const [userData, setUserData] = useState({
+    email: null
+  });
 
-    this.getUser = this.getUser.bind(this)
-    this.componentDidMount = this.componentDidMount.bind(this)
-    this.updateUser = this.updateUser.bind(this);
+  const isLoading = appState === AppState.LOADING;
+
+  useEffect(() => {
+    getUser();
+  }, [])
+
+  const updateUser = (appState, user) => {
+    setAppState(appState);
+    setUserData(user);
   }
 
-  async componentDidMount() {
-    await this.getUser()
-  }
-
-  updateUser (userObject) {
-    this.setState(userObject)
-  }
-
-  async getUser() {
+  const getUser = async () => {
     let response = await axios.get('/auth/currentUser');
+    console.log(response)
     if (response.data.user) {
-      await this.setState({
-        appState: AppState.AUTHENTICATED,
+      await setAppState(AppState.AUTHENTICATED)
+      await setUserData({
         email: response.data.user.email
       })
     } else {
-      await this.setState({
-        appState: AppState.GUEST,
+      await setAppState(AppState.GUEST)
+      await setUserData({
         email: null
       })
     }
   }
 
-  render() {
-    const isLoading = this.state.appState === AppState.LOADING;
-    return (
-      <div>
-        {
-          isLoading ? 
-          (<>
+  return (
+    <div>
+      {
+        isLoading ? 
+        (<>
 
-          </>) : (<>
-            <Navbar updateUser={this.updateUser} appState={this.state.appState} />
-    
-            <PrivateRoute container={this} exact path="/">
-              <HomePage/>
-            </PrivateRoute>
-            <PrivateRoute container={this} path="/courses">
-              <HomePage/>
-            </PrivateRoute>
-            <PrivateRoute container={this} path="/progress">
-              <HomePage/>
-            </PrivateRoute>
-            <Route path="/login">
-              <LoginForm updateUser={this.updateUser}/>
-            </Route>
-            <Route path="/register">
-              <RegisterForm/>
-            </Route>
-    
-            <ToastContainer />
-          </>)
-        }
-      </div>
-    );
-  }
+        </>) : (<>
+          <Navbar updateUser={updateUser} user={userData} appState={appState} />
+  
+          <PrivateRoute appState={appState} updateUser={updateUser} exact path="/">
+            <HomePage/>
+          </PrivateRoute>
+          <PrivateRoute appState={appState} updateUser={updateUser} path="/courses">
+            <HomePage/>
+          </PrivateRoute>
+          <PrivateRoute appState={appState} updateUser={updateUser} path="/progress">
+            <HomePage/>
+          </PrivateRoute>
+          <Route path="/login">
+            <LoginForm updateUser={updateUser}/>
+          </Route>
+          <Route path="/register">
+            <RegisterForm/>
+          </Route>
+  
+          <ToastContainer />
+        </>)
+      }
+    </div>
+  );
 }
 
 // TODO: Replace this container param with Redux
-function PrivateRoute({ container, children, ...rest }) {
+function PrivateRoute({ appState, updateUser, children, ...rest }) {
   return (
     <Route
       {...rest}
       render={({ location }) => {
-        switch (container.state.appState) {
+        switch (appState) {
           case AppState.LOADING:
             return <></>;
 
@@ -94,7 +89,7 @@ function PrivateRoute({ container, children, ...rest }) {
             return children;
 
           case AppState.LOGOUT:
-            container.updateUser({appState: AppState.GUEST});
+            updateUser({appState: AppState.GUEST});
             break;
 
           default:

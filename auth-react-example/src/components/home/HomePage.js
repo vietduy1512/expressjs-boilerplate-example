@@ -1,32 +1,25 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: null,
-      dataList: null
-    };
-  }
+const Home = () => {
 
-  componentDidMount() {
+  const [title, setTitle] = useState(null);
+  const [dataList, setDataList] = useState([]);
+
+  useEffect(() => {
     axios.get('/data').then(res => {
-      this.setState({
-        title: res.title,
-        dataList: res.data
-      })
-    })
-  }
+      setTitle(res.data.title);
+      setDataList(res.data.data);
+    }, [])
+  })
 
-  render() {
-    return (
-      <div className="text-center">
-        <p>Home Page</p>
-        <p>{this.state.title}</p>
-      </div>
-    )
-  }
+  return (
+    <div className="text-center">
+      <p>Home Page</p>
+      <p>{title}</p>
+      {dataList.map(data => <p>{data}</p>)}
+    </div>
+  )
 }
 
 export default Home
