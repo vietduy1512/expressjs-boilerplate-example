@@ -45,7 +45,7 @@ const Navbar = (props) => {
                   Profile
                 </Link>
                 <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                  <Link className="dropdown-item" to="#">My Account</Link>
+                  <Link className="dropdown-item" to="#">Dashboard</Link>
                   <Link className="dropdown-item" to="#">Settings</Link>
                   <div className="dropdown-divider"></div>
                   <Link className="dropdown-item" onClick={logout} to="#">Logout</Link>

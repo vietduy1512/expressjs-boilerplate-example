@@ -4,25 +4,26 @@ import { Route } from 'react-router-dom'
 import RegisterForm from 'components/auth/RegisterForm'
 import LoginForm from 'components/auth/LoginForm'
 import HomePage from 'components/home/HomePage'
-import PrivateRoute from 'routes/PrivateRoute'
+import PrivateRoute from './PrivateRoute'
+import GuestOnlyRoute from './GuestOnlyRoute'
 
 const RouterView = (props) => {
   return (<>
-    <PrivateRoute exact path="/">
+    <Route exact path="/">
       <HomePage/>
-    </PrivateRoute>
+    </Route>
     <PrivateRoute path="/courses">
       <HomePage/>
     </PrivateRoute>
     <PrivateRoute path="/progress">
       <HomePage/>
     </PrivateRoute>
-    <Route path="/login">
+    <GuestOnlyRoute path="/login">
       <LoginForm/>
-    </Route>
-    <Route path="/register">
+    </GuestOnlyRoute>
+    <GuestOnlyRoute path="/register">
       <RegisterForm/>
-    </Route>
+    </GuestOnlyRoute>
   </>);
 }
 
