@@ -1,1 +1,0 @@
-exports.mongoUrl = 'mongodb://localhost:27017/auth_test';

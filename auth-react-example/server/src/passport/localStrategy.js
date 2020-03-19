@@ -7,21 +7,22 @@ const strategy = new LocalStrategy(
     passwordField: 'password'
 	},
 	function(email, password, done) {
-		User.findOne({ email: email }, (err, user) => {
-			if (err) {
-				return done(err)
-			}
-			if (!user) {
-				return done(null, false, { message: 'Incorrect email' })
-			}
-			if (!user.password) {
-				return done(null, false, { message: 'No password' });
-			}
-			if (!user.checkPassword(password)) {
-				return done(null, false, { message: 'Incorrect password' })
-			}
-			return done(null, user)
-		})
+		User.findOne({where: { email: email }})
+			.then(user => {
+				if (!user) {
+					return done(null, false, { message: 'Incorrect email' })
+				}
+				if (!user.password) {
+					return done(null, false, { message: 'No password' });
+				}
+				if (!user.checkPassword(password)) {
+					return done(null, false, { message: 'Incorrect password' })
+				}
+				return done(null, user)
+			})
+			.catch(err => {
+				return done(err);
+			})
 	}
 )
 

@@ -6,8 +6,6 @@ const cors = require('cors');
 const session = require('express-session');
 const passport = require('./src/passport');
 const routes = require('./routes');
-const dbConnection = require('./src/mongoose');
-const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 
@@ -25,9 +23,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const sequelize = require("./src/database");
+// TODO
+sequelize.sync();
+
 app.use(session({
   secret: "SeRectKeY@123",
-  store: new MongoStore({ mongooseConnection: dbConnection }),
   resave: false,
   saveUninitialized: false
 }))

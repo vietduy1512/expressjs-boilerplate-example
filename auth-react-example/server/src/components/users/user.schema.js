@@ -1,79 +1,75 @@
-const mongoose = require('mongoose');
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../../database');
 const bcrypt = require('bcryptjs');
-
-const Schema = mongoose.Schema;
 
 const RoleTypes = Object.freeze({
   USER: 'User',
   ADMIN: 'Admin'
 });
 
-let userSchema = new Schema(
-  {
-    email: { type: String, unique: true, trim: true, required: true, max: 60 },
-    password: { type: String, required: true, max: 32, min: 6 },
-    fullname: { type: String, required: false, default:'', max: 80 },
-    isActive: { type: Boolean, default: true },
-    role: {
-      type: String,
-      enum: [RoleTypes.USER, RoleTypes.ADMIN],
-      default: RoleTypes.USER
-    }
-  }
-);
+class User extends Model {
 
-userSchema
-    .virtual('url')
-    .get(() => {
-        return '/users/' + this._id;
-    });
-
-userSchema
-    .virtual('isAdmin')
-    .get(() => {
-        return this.role === RoleTypes.ADMIN;
-    });
-
-userSchema
-    .virtual('isUser')
-    .get(() => {
-        return this.role === RoleTypes.USER;
-    });
-
-userSchema.pre('save', function(next) {
-    let user = this;
-    if (user.password) {
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(user.password, salt, (err, hash) => {
-          user.password = hash;
-          next();
-        })
-      })
-    } else {
-      next();
-    }
-})
-
-userSchema.methods = {
-  checkPassword: function(inputPassword) {
-    return bcrypt.compareSync(inputPassword, this.password)
-  },
-  hashPassword: function(plainTextPassword) {
-    return bcrypt.hashSync(plainTextPassword, 10)
-  }
-}
-
-userSchema.statics = {
-  register: function(user) {
-    return this.findOne({ email: user.email }).then(data => {
+  static register(user) {
+    return this.findOne({where: { email: user.email }}).then(data => {
         if (data === null) {
           return user.save();
         }
         return Promise.reject("Email has already registered.");
     })
   }
+  checkPassword(inputPassword) {
+    return bcrypt.compareSync(inputPassword, this.password)
+  }
+  hashPassword(plainTextPassword) {
+    return bcrypt.hashSync(plainTextPassword, 10)
+  }
+
+  get url() {
+    return '/users/' + this._id;
+  }
+  get isAdmin() {
+    return this.role === RoleTypes.ADMIN;
+  }
+  get isUser() {
+    return this.role === RoleTypes.USER;
+  }
 }
 
+User.init({
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  email: { type: DataTypes.STRING, allowNull: false, unique: true, trim: true,
+    validate: {
+      len: [4,64]
+    }
+  },
+  password: { type: DataTypes.STRING, allowNull: false,
+    validate: {
+      len: [4,32]
+    }
+  },
+  fullname: { type: String, defaultValue:'',
+    validate: {
+      len: [0,32]
+    }
+  },
+  isActive: { type: Boolean, defaultValue: true },
+  role: {
+    type: DataTypes.ENUM(RoleTypes.USER, RoleTypes.ADMIN),
+    defaultValue: RoleTypes.USER
+  }
+}, {
+  sequelize,
+  modelName: 'user'
+});
 
+User.beforeCreate(async (user) => {
+  if (user.password) {
+    let salt = await bcrypt.genSalt(10); 
+    let hashedPasword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPasword;
+  } else {
+    return Promise.reject(new Error("No password!"));
+  }
+});
 
-module.exports = mongoose.model(RoleTypes.USER, userSchema);
+module.exports = User;
