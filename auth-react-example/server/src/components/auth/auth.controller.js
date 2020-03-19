@@ -13,21 +13,16 @@ exports.login = (req, res) => {
 }
 
 exports.register = async (req, res) => {
-    const { email, password } = req.body
-
-    // TODO: Validate register data here
-    let existedUser = await User.findOne({ email: email });
-    if (existedUser) {
-        res.status(400);
-        return res.json({ message: 'User is already existed.' });;
-    }
-
     const newUser = new User({
-        email: email,
-        password: password
+        email: req.body.email,
+        fullname: req.body.fullname,
+        password: req.body.password
     })
-    await newUser.save();
-    return res.json({ email: newUser.email });
+    newUser.save().then(user => {
+        return res.json({ email: newUser.email });
+    }).catch(error => {
+        return res.status(400).json({ errors: error.errors });
+    });
 }
 
 exports.logout = (req, res) => {

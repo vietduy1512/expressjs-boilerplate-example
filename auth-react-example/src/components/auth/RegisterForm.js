@@ -9,6 +9,7 @@ const RegisterForm = () => {
 
   const [form, setForm] = useState({
     email: '',
+    fullname: '',
     password: '',
     confirmPassword: '',
     errorMessage: ''
@@ -40,7 +41,8 @@ const RegisterForm = () => {
       })
       .catch(error => {
         setForm({
-          errorMessage: error.response.data.message
+          // TODO
+          errorMessage: error.response.data.errors[0].msg
         })
       })
   }
@@ -66,10 +68,28 @@ const RegisterForm = () => {
               </div>
               <div className="form-group">
                 <input className="form-control"
+                  type="text"
+                  name="fullname"
+                  placeholder="Fullname"
+                  value={form.fullname}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <input className="form-control"
                   type="password"
                   name="password"
                   placeholder="Password"
                   value={form.password}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <input className="form-control"
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm password"
+                  value={form.confirmPassword}
                   onChange={handleChange}
                 />
               </div>
