@@ -3,45 +3,21 @@ import { AppState } from 'constants/app'
 import axios from 'axios'
 
 export const getUser = () => async (dispatch) => {
-  let response = await axios.get('/auth/currentUser');
-  let user = response.data.user;
-
-  if (user) {
-    dispatch({
-      type: UPDATE_APP_STATE,
-      appState: AppState.AUTHENTICATED
-    });
-    dispatch({
-      type: UPDATE_APP_CURRENT_USER,
-      user: {
-        email: user.email
-      }
-    });
-  } else {
-    dispatch({
-      type: UPDATE_APP_STATE,
-      user: AppState.GUEST
-    });
-    dispatch({
-      type: UPDATE_APP_CURRENT_USER,
-      user: {
-        email: null
-      }
-    });
+  try {
+    let response = await axios.get('/auth/currentUser');
+    let user = response.data.user;
+    if (user) {
+      dispatchAuth(dispatch, user);
+    } else {
+      dispatchGuest(dispatch);
+    }
+  } catch (error) {
+    dispatchGuest(dispatch);
   }
 };
 
 export const login = (user) => async (dispatch) => {
-  dispatch({
-    type: UPDATE_APP_STATE,
-    appState: AppState.AUTHENTICATED
-  });
-  dispatch({
-    type: UPDATE_APP_CURRENT_USER,
-    user: {
-      email: user.email
-    }
-  });
+  dispatchAuth(user);
 };
 
 export const logout = () => async (dispatch) => {
@@ -63,3 +39,29 @@ export const postLogout = () => async (dispatch) => {
     appState: AppState.GUEST
   });
 };
+
+const dispatchAuth = (dispatch, user) => {
+  dispatch({
+    type: UPDATE_APP_STATE,
+    appState: AppState.AUTHENTICATED
+  });
+  dispatch({
+    type: UPDATE_APP_CURRENT_USER,
+    user: {
+      email: user.email
+    }
+  });
+}
+
+const dispatchGuest = (dispatch) => {
+  dispatch({
+    type: UPDATE_APP_STATE,
+    user: AppState.GUEST
+  });
+  dispatch({
+    type: UPDATE_APP_CURRENT_USER,
+    user: {
+      email: null
+    }
+  });
+}

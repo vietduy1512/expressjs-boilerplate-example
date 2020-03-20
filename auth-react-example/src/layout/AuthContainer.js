@@ -12,18 +12,10 @@ const Auth = (props) => {
     // eslint-disable-next-line
   }, [])
   
-  const isLoading = props.appState === AppState.LOADING;
-
   return (
     <div>
-      {
-        isLoading ? 
-        (<>
-        </>) : (<>
-          <Navbar/>
-          <RouterView/>
-        </>)
-      }
+      <Navbar/>
+      <RouterView/>
     </div>
   );
 }
