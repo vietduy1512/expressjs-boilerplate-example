@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Navbar from 'components/common/Navbar'
-import { AppState } from 'constants/app'
 import { getUser } from 'actions/appAction'
 import { connect } from 'react-redux';
 import RouterView from 'routes/main';
