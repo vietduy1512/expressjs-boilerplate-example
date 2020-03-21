@@ -52,7 +52,7 @@ User.init({
       len: [0,32]
     }
   },
-  isActive: { type: Boolean, defaultValue: true },
+  isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
   role: {
     type: DataTypes.ENUM(RoleTypes.USER, RoleTypes.ADMIN),
     defaultValue: RoleTypes.USER
