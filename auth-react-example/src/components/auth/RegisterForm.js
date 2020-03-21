@@ -9,10 +9,12 @@ const RegisterForm = () => {
 
   const [form, setForm] = useState({
     email: '',
+    fullname: '',
     password: '',
-    confirmPassword: '',
-    errorMessage: ''
+    confirmPassword: ''
   });
+  const [errorMessage, setErrorMessage] = useState([]);
+  const [redirectTo, setRedirectTo] = useState(null);
 
   const handleChange = (event) => {
     setForm({
@@ -28,25 +30,33 @@ const RegisterForm = () => {
       password: form.password
     }).then(response => {
         if (!response.data.errmsg) {
-          setForm({
-            redirectTo: '/login'
-          })
+          setRedirectTo('/login');
           addToast("Register successfully!", { appearance: 'success', autoDismiss: true, });
         } else {
-          setForm({
-            errorMessage: 'Email is already taken'
-          })
+          setErrorMessage(['Email is already taken']);
         }
       })
       .catch(error => {
-        setForm({
-          errorMessage: error.response.data.message
-        })
+        if (!error.response || !error.response.data) {
+          setErrorMessage(['Something went wrong']);
+          return;
+        }
+
+        switch (error.response.status) {
+          case 401:
+            setErrorMessage(error.response.data.errors.map(err => err.msg));
+            break;
+          case 400:
+            setErrorMessage(error.response.data.errors.map(err => err.msg));
+            break;
+          default:
+            break;
+        }
       })
   }
 
-  if (form.redirectTo) {
-    return <Redirect to={{ pathname: form.redirectTo }} />
+  if (redirectTo) {
+    return <Redirect to={{ pathname: redirectTo }} />
   } else {
     return (
       <div className="row m-0"> 
@@ -66,11 +76,31 @@ const RegisterForm = () => {
               </div>
               <div className="form-group">
                 <input className="form-control"
+                  type="text"
+                  name="fullname"
+                  placeholder="Fullname"
+                  value={form.fullname}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <input className="form-control"
                   type="password"
                   name="password"
                   placeholder="Password"
                   value={form.password}
                   onChange={handleChange}
+                  autoComplete="on"
+                />
+              </div>
+              <div className="form-group">
+                <input className="form-control"
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm password"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  autoComplete="on"
                 />
               </div>
               <div className="form-group">
@@ -80,7 +110,7 @@ const RegisterForm = () => {
                   type="submit"
                 >Sign up</button>
               </div>
-              <p className="text-danger">{form.errorMessage}</p>
+              <div className="text-danger">{errorMessage.map(msg => <p>{msg}</p>)}</div>
             </form>
           </div>
         </div>

@@ -11,10 +11,10 @@ const LoginForm = (props) => {
 
   const [form, setForm] = useState({
     email: '',
-    password: '',
-    redirectTo: null,
-    errorMessage: ''
+    password: ''
   });
+  const [errorMessage, setErrorMessage] = useState([]);
+  const [redirectTo, setRedirectTo] = useState(null);
 
   const handleChange = (event) => {
     setForm({
@@ -32,19 +32,31 @@ const LoginForm = (props) => {
         if (response.status === 200) {
           let user = response.data;
           props.login(user);
-          setForm({ ...form, redirectTo: '/' });
+          setRedirectTo('/');
           addToast('Login successfully!', { appearance: 'success', autoDismiss: true, });
         }
       }).catch(error => {
-        setForm({
-          ...form,
-          errorMessage: error.response.data.message
-        })
+        // TODO
+        if (!error.response || !error.response.data || !error.response.data) {
+          setErrorMessage(['Something went wrong']);
+          return;
+        }
+
+        switch (error.response.status) {
+          case 401:
+            setErrorMessage(error.response.data.errors.map(err => err.msg));
+            break;
+          case 400:
+            setErrorMessage(error.response.data.errors.map(err => err.msg));
+            break;
+          default:
+            break;
+        }
       })
   }
 
-  if (form.redirectTo) {
-    return <Redirect to={{ pathname: form.redirectTo }} />
+  if (redirectTo) {
+    return <Redirect to={{ pathname: redirectTo }} />
   } else {
     return (
       <div className="row m-0"> 
@@ -69,6 +81,7 @@ const LoginForm = (props) => {
                   placeholder="Password"
                   value={form.password}
                   onChange={handleChange}
+                  autoComplete="on"
                 />
               </div>
               <div className="form-group">
@@ -79,7 +92,7 @@ const LoginForm = (props) => {
                   onClick={handleSubmit}
                   type="submit">Login</button>
               </div>
-              <p className="text-danger">{form.errorMessage}</p>
+              <div className="text-danger">{errorMessage.map(msg => <p>{msg}</p>)}</div>
             </form>
           </div>
         </div>
