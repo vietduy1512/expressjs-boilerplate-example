@@ -47,7 +47,7 @@ User.init({
       len: [4,32]
     }
   },
-  fullname: { type: String, defaultValue:'',
+  fullname: { type: DataTypes.STRING, defaultValue:'',
     validate: {
       len: [0,32]
     }
