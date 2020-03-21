@@ -25,10 +25,7 @@ const RegisterForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('/auth/register', {
-      email: form.email,
-      password: form.password
-    }).then(response => {
+    axios.post('/auth/register', form).then(response => {
         if (!response.data.errmsg) {
           setRedirectTo('/login');
           addToast("Register successfully!", { appearance: 'success', autoDismiss: true, });

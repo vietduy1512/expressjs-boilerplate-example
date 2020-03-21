@@ -25,10 +25,7 @@ const LoginForm = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    axios.post('/auth/login', {
-        email: form.email,
-        password: form.password
-      }).then(response => {
+    axios.post('/auth/login', form).then(response => {
         if (response.status === 200) {
           let user = response.data;
           props.login(user);
