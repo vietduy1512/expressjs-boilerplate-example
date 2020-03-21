@@ -17,7 +17,7 @@ export const getUser = () => async (dispatch) => {
 };
 
 export const login = (user) => async (dispatch) => {
-  dispatchAuth(user);
+  dispatchAuth(dispatch, user);
 };
 
 export const logout = () => async (dispatch) => {
