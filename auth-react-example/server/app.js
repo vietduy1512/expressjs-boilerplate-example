@@ -27,14 +27,21 @@ const sequelize = require("./src/database");
 // TODO
 sequelize.sync();
 
-app.use(session({
+const sessionOptions = {
   secret: "SeRectKeY@123",
   resave: false,
-  saveUninitialized: false,
-  cookie : {
-    sameSite: 'none',
+  saveUninitialized: false
+}
+
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1);
+  sessionOptions.cookie = {
+    sameSite: 'None',
+    secure: true
   }
-}))
+}
+
+app.use(session(sessionOptions))
 
 app.use(passport.initialize())
 app.use(passport.session())
